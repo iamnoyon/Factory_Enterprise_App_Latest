@@ -13,7 +13,12 @@ const app = express();
 require("./config/db");
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -38,7 +43,6 @@ app.use((err, req, res, next) => {
     message: "Internal Server Error",
   });
 });
-
 
 // export the app for use in other files (like server.js)
 module.exports = app;
