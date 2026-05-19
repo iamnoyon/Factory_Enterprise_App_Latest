@@ -20,7 +20,7 @@ const sendEmail = (name, email, subject, password) => {
       to: email,
       subject: subject,
       html: `
-  <h2>Welcome to {{Your Company Name}}</h2>
+  <h2>Welcome to ${appConfig.app_name}</h2>
 
   <p>Hello <b>${name}</b>,</p>
 
@@ -38,7 +38,7 @@ const sendEmail = (name, email, subject, password) => {
   <p>If you did not request this account, please contact support.</p>
 
   <br/>
-  <p>Thanks,<br/>{{Your Company Name}} Team</p>
+  <p>Thanks,<br/>${appConfig.app_name} Team</p>
 `,
     };
     return transporter.sendMail(mailOptions);

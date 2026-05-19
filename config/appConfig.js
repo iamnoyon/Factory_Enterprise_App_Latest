@@ -9,6 +9,7 @@ const appConfig = {
   jwt_secret: process.env.JWT_SECRET || "secretkey",
   jwt_access_token_expiry: process.env.JWT_ACCESS_TOKEN_EXPIRY || "1h",
   jwt_refresh_token_expiry: process.env.JWT_REFRESH_TOKEN_EXPIRY || "7d",
+  app_name: process.env.APP_NAME || "Prodex",
 };
 
 module.exports = appConfig;
