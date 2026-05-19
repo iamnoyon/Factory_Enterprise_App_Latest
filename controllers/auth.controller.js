@@ -1,5 +1,5 @@
 const User = require("../models/user.model");
-const { comparePassword } = require("../utils/hash");
+const { comparePassword, hashPassword } = require("../utils/hash");
 const { generateAccessToken, generateRefreshToken } = require("../utils/token");
 
 const userLoginController = async (req, res) => {
@@ -82,10 +82,35 @@ const userLogoutController = async (req, res) => {
       message: "Internal Server Error",
     });
   }
-}
+};
 
+const createOwnerController = async (req, res) => {
+  try {
+    const owner = await User({
+      name: "Company Owner",
+      email: "owner@gmail.com",
+      password: await hashPassword("123456"),
+      role: "owner",
+      permissions: ["create_user", "read_user", "update_user", "delete_user"],
+      status: "active",
+    });
+    await owner.save();
+    res.status(201).json({
+      success: true,
+      status_code: 201,
+      message: "Owner created successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      status_code: 500,
+      message: `Internal Server Error ${err.message}}`,
+    });
+  }
+};
 
 module.exports = {
   userLoginController,
-  userLogoutController
+  userLogoutController,
+  createOwnerController,
 };
