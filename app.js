@@ -24,6 +24,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from uploads directory
+app.use('/uploads', express.static('uploads/'));
+
 // Use the routes
 app.use("/api", authRoutes);
 app.use("/api/user", userRoutes);

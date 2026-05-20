@@ -12,7 +12,8 @@ const attachmentUploadController = async (req, res) => {
       success: true,
       status_code: 200,
       message: "File uploaded successfully",
-      file: req.file.filename,
+      filename: req.file.filename,
+      path: req.file.path,
     });
     // ...
   } catch (error) {

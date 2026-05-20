@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const { comparePassword, hashPassword } = require("../utils/hash");
 const { generateAccessToken, generateRefreshToken } = require("../utils/token");
+const path = require("path");
 
 const userLoginController = async (req, res) => {
   try {
@@ -142,9 +143,35 @@ const changePasswordController = async (req, res) => {
   }
 }
 
+
+const updateProfilePhotoController = async (req, res) => {
+  try {
+    const { id, email } = req.user;
+    const {fileName} = req.body;
+
+    const user = await User.findOne({ email: email });
+    user.profile_photo =  `${process.env.APP_DOMAIN}/uploads/${fileName}`;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      status_code: 200,
+      path: user.profile_photo,
+      message: "Profile photo updated successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      status_code: 500,
+      message: `Internal Server Error`,
+    });
+  }
+};
+
 module.exports = {
   userLoginController,
   userLogoutController,
   createOwnerController,
-  changePasswordController
+  changePasswordController,
+  updateProfilePhotoController
 };
