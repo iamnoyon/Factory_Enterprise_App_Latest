@@ -109,8 +109,42 @@ const createOwnerController = async (req, res) => {
   }
 };
 
+
+const changePasswordController = async (req, res) => {
+  try {
+    const { newPassword, confirmPassword } = req.body;
+    const {id, email} = req.user;
+
+    if(newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        status_code: 400,
+        message: "New password and confirm password do not match",
+      });
+    }
+
+    const user = await User.findOne({email: email});
+    user.password = await hashPassword(newPassword);
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      status_code: 200,
+      message: "Password changed successfully",
+    });
+
+  }catch (err) {
+    res.status(500).json({
+      success: false,
+      status_code: 500,
+      message: `Internal Server Error ${err.message}}`,
+    });
+  }
+}
+
 module.exports = {
   userLoginController,
   userLogoutController,
   createOwnerController,
+  changePasswordController
 };

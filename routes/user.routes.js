@@ -16,6 +16,6 @@ userRouter.post(
   AuthorizationChecker("create_user"),
   createUserController,
 );
-userRouter.get("/me", AuthChecker, getCurrentUserController);
+
 
 module.exports = userRouter;

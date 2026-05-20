@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 // routes imports
 const userRoutes = require("./routes/user.routes");
 const authRoutes = require("./routes/auth.route");
+const attachmentRoutes = require("./routes/attachment.route");
 
 // Create an Express application
 const app = express();
@@ -26,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 // Use the routes
 app.use("/api", authRoutes);
 app.use("/api/user", userRoutes);
-
+app.use("/api/attachment", attachmentRoutes);
 // handle client errors
 app.use((req, res, next) => {
   res.status(404).json({

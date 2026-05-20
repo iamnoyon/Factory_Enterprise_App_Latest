@@ -65,7 +65,7 @@ const getCurrentUserController = async (req, res) => {
       success: true,
       status_code: 200,
       message: "User data retrieved successfully",
-      date: user,
+      user: user,
     });
   } catch (err) {
     res.status(500).json({
