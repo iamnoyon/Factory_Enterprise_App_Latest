@@ -2,7 +2,7 @@ const userRouter = require("express").Router();
 // Import the user controller
 const {
   createUserController,
-  getCurrentUserController,
+  getAllUsersController
 } = require("../controllers/user.controller");
 const {
   AuthChecker,
@@ -17,5 +17,11 @@ userRouter.post(
   createUserController,
 );
 
+userRouter.get(
+  "/list",
+  AuthChecker,
+  // AuthorizationChecker("view_user"),
+  getAllUsersController
+)
 
 module.exports = userRouter;

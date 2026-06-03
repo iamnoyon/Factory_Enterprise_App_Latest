@@ -27,8 +27,7 @@ const createUserController = async (req, res) => {
     await new_user.save();
 
     // Send email asynchronously (don't wait for it)
-    sendEmail(name, email, "Your Account Has Been Created", password)
-    .catch(
+    sendEmail(name, email, "Your Account Has Been Created", password).catch(
       (err) => {
         console.error("Email sending failed:", err);
       },
@@ -76,8 +75,61 @@ const getCurrentUserController = async (req, res) => {
   }
 };
 
+const getAllUsersController = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const search = req.query.search || "";
+    const status = req.query.status || "";
+
+    // Build filter query
+    const filter = {};
+
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (status) {
+      filter.status = status;
+    }
+
+    const users = await User.find(filter)
+      .select("-password")
+      .select("-permissions")
+      .skip(skip)
+      .limit(limit);
+
+    const total = await User.countDocuments(filter);
+    const totalPages = Math.ceil(total / limit);
+
+    res.status(200).json({
+      success: true,
+      status_code: 200,
+      message: "Users retrieved successfully",
+      pagination: {
+        page: page,
+        limit: limit,
+        total: total,
+        totalPages: totalPages,
+      },
+      users: users,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      status_code: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 // export the controller functions
 module.exports = {
   createUserController,
   getCurrentUserController,
+  getAllUsersController,
 };
