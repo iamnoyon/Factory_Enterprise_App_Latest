@@ -20,7 +20,7 @@ userRouter.post(
 userRouter.get(
   "/list",
   AuthChecker,
-  // AuthorizationChecker("view_user"),
+  AuthorizationChecker("read_user"),
   getAllUsersController
 )
 

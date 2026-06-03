@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/user.routes");
 const authRoutes = require("./routes/auth.route");
 const attachmentRoutes = require("./routes/attachment.route");
+const adminRoutes = require("./routes/admin.route");
 
 // Create an Express application
 const app = express();
@@ -30,6 +31,8 @@ app.use("/uploads", express.static("uploads")); // Serve static files from the "
 app.use("/api", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/attachment", attachmentRoutes);
+app.use("/api/admin", adminRoutes);
+
 // handle client errors
 app.use((req, res, next) => {
   res.status(404).json({
