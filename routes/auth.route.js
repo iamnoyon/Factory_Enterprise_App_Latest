@@ -5,7 +5,8 @@ const {
   userLogoutController,
   createOwnerController,
   changePasswordController,
-  updateProfilePhotoController
+  updateProfilePhotoController,
+  userForgetPasswordController
 } = require("../controllers/auth.controller");
 const { getCurrentUserController } = require("../controllers/user.controller");
 const { AuthChecker } = require("../middlewares/Auth.middleware");
@@ -16,6 +17,7 @@ authRouter.post("/logout", AuthChecker, userLogoutController);
 authRouter.get("/me", AuthChecker, getCurrentUserController);
 authRouter.put("/change-password", AuthChecker, changePasswordController);
 authRouter.put("/update-profile-photo", AuthChecker, updateProfilePhotoController);
+authRouter.put("/forget-password", userForgetPasswordController)
 
 //create owner
 authRouter.post("/create-owner", createOwnerController);

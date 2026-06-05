@@ -1,6 +1,6 @@
 const User = require("../models/user.model");
 const { hashPassword } = require("../utils/hash");
-const { sendEmail } = require("../utils/nodemailer");
+const { sendEmail, sendInvitationEmail } = require("../utils/nodemailer");
 const { generateRandomPassword } = require("../utils/passGenerate");
 
 // Create a new user
@@ -162,7 +162,7 @@ const updateUserStatusController = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    const findUser = await User.findOne({id});
+    const findUser = await User.findOne({ id });
 
     if (!findUser) {
       return res.status(404).json({
@@ -172,9 +172,19 @@ const updateUserStatusController = async (req, res) => {
       });
     }
 
-    findUser.status = status;
+    findUser.status = status === "invitation" ? "pending" : status;
 
     await findUser.save();
+
+    if (status === "invitation") {
+      sendInvitationEmail(
+        findUser.email,
+        "Congratulations! You have been successfully invited to the application. Your account has been ready for use.",
+        "",
+      ).catch((err) => {
+        console.error("Email sending failed:", err);
+      });
+    }
 
     return res.status(200).json({
       success: true,
@@ -182,7 +192,6 @@ const updateUserStatusController = async (req, res) => {
       message: "User status updated successfully",
     });
   } catch (error) {
-
     return res.status(500).json({
       success: false,
       status_code: 500,

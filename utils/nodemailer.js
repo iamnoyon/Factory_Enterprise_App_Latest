@@ -47,4 +47,19 @@ const sendEmail = (name, email, subject, password) => {
   }
 };
 
-module.exports = { sendEmail };
+// Function to send an email
+const sendInvitationEmail = (email, message) => {
+  try {
+    const mailOptions = {
+      from: appConfig.smtp_user,
+      to: email,
+      subject: 'Welcome to the Application.',
+      html: message,
+    };
+    return transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
+};
+
+module.exports = { sendEmail, sendInvitationEmail };
