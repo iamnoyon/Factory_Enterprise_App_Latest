@@ -127,9 +127,40 @@ const getAllUsersController = async (req, res) => {
   }
 };
 
+const getUserDropdownWithPermissionsController = async (req, res) => {
+  try {
+    const users = await User.find({
+      role: { $ne: "owner" },
+      status: "approved",
+    })
+      .select("-password")
+      .select("-email")
+      .select("-status")
+      .select("-createdAt")
+      .select("-updatedAt")
+      .select("-createdBy")
+      .select("-updatedBy")
+      .select("-_id")
+      .select("-profile_photo");
+
+    res.status(200).json({
+      success: true,
+      status_code: 200,
+      data: users,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      status_code: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 // export the controller functions
 module.exports = {
   createUserController,
   getCurrentUserController,
   getAllUsersController,
+  getUserDropdownWithPermissionsController,
 };

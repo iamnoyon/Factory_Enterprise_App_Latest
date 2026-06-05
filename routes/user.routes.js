@@ -2,7 +2,8 @@ const userRouter = require("express").Router();
 // Import the user controller
 const {
   createUserController,
-  getAllUsersController
+  getAllUsersController,
+  getUserDropdownWithPermissionsController
 } = require("../controllers/user.controller");
 const {
   AuthChecker,
@@ -22,6 +23,13 @@ userRouter.get(
   AuthChecker,
   AuthorizationChecker("read_user"),
   getAllUsersController
+)
+
+userRouter.get(
+  '/dropdown-with-permissions',
+  AuthChecker,
+  AuthorizationChecker("read_user"),
+  getUserDropdownWithPermissionsController
 )
 
 module.exports = userRouter;

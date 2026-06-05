@@ -39,7 +39,7 @@ const userSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["active", "inactive", "suspended", "pending"],
+        enum: ["active", "approved", "suspended", "pending"],
         default: "pending"
     },
     profile_photo: {
