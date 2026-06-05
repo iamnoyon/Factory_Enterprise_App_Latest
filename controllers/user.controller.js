@@ -157,10 +157,45 @@ const getUserDropdownWithPermissionsController = async (req, res) => {
   }
 };
 
+const updateUserStatusController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const findUser = await User.findOne({id});
+
+    if (!findUser) {
+      return res.status(404).json({
+        success: false,
+        status_code: 404,
+        message: "User not found",
+      });
+    }
+
+    findUser.status = status;
+
+    await findUser.save();
+
+    return res.status(200).json({
+      success: true,
+      status_code: 200,
+      message: "User status updated successfully",
+    });
+  } catch (error) {
+
+    return res.status(500).json({
+      success: false,
+      status_code: 500,
+      message: error.message,
+    });
+  }
+};
+
 // export the controller functions
 module.exports = {
   createUserController,
   getCurrentUserController,
   getAllUsersController,
   getUserDropdownWithPermissionsController,
+  updateUserStatusController,
 };

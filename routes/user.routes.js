@@ -3,7 +3,8 @@ const userRouter = require("express").Router();
 const {
   createUserController,
   getAllUsersController,
-  getUserDropdownWithPermissionsController
+  getUserDropdownWithPermissionsController,
+  updateUserStatusController
 } = require("../controllers/user.controller");
 const {
   AuthChecker,
@@ -30,6 +31,13 @@ userRouter.get(
   AuthChecker,
   AuthorizationChecker("read_user"),
   getUserDropdownWithPermissionsController
+)
+
+userRouter.put(
+  '/update-status/:id',
+  AuthChecker,
+  AuthorizationChecker("update_user"),
+  updateUserStatusController
 )
 
 module.exports = userRouter;
