@@ -3,8 +3,9 @@ const userRouter = require("express").Router();
 const {
   createUserController,
   getAllUsersController,
+  updateUserStatusController,
+  updateUserPermissionController,
   getUserDropdownWithPermissionsController,
-  updateUserStatusController
 } = require("../controllers/user.controller");
 const {
   AuthChecker,
@@ -23,21 +24,28 @@ userRouter.get(
   "/list",
   AuthChecker,
   AuthorizationChecker("read_user"),
-  getAllUsersController
-)
+  getAllUsersController,
+);
 
 userRouter.get(
-  '/dropdown-with-permissions',
+  "/dropdown-with-permissions",
   AuthChecker,
   AuthorizationChecker("read_user"),
-  getUserDropdownWithPermissionsController
-)
+  getUserDropdownWithPermissionsController,
+);
 
 userRouter.put(
-  '/update-status/:id',
+  "/update-status/:id",
   AuthChecker,
   AuthorizationChecker("update_user"),
-  updateUserStatusController
-)
+  updateUserStatusController,
+);
+
+userRouter.put(
+  "/update-permissions",
+  AuthChecker,
+  AuthorizationChecker("update_user"),
+  updateUserPermissionController,
+);
 
 module.exports = userRouter;

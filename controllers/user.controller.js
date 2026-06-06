@@ -173,6 +173,7 @@ const updateUserStatusController = async (req, res) => {
     }
 
     findUser.status = status === "invitation" ? "pending" : status;
+    findUser.updatedBy = req.user.id;
 
     await findUser.save();
 
@@ -200,6 +201,41 @@ const updateUserStatusController = async (req, res) => {
   }
 };
 
+const updateUserPermissionController = async (req, res) => {
+  const { id } = req.user;
+  const {userId, role, permissions} = req.body;
+
+  try {
+    const find_user = await User.findOne({id: userId});
+    if(!find_user){
+      return res.status(404).json({
+        success: false,
+        status_code: 404,
+        message: "User not found!"
+      })
+    }
+
+    find_user.role = role;
+    find_user.permissions = permissions;
+    find_user.updatedBy = id;
+
+    await find_user.save();
+
+    return res.status(200).json({
+      success: true,
+      status_code: 200,
+      message: 'User role & permissions are updated successfully!'
+    })
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      status_code: 500,
+      message: error.message,
+    });
+  }
+};
+
 // export the controller functions
 module.exports = {
   createUserController,
@@ -207,4 +243,5 @@ module.exports = {
   getAllUsersController,
   getUserDropdownWithPermissionsController,
   updateUserStatusController,
+  updateUserPermissionController,
 };
